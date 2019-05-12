@@ -1,3 +1,6 @@
 .idea/
 *.iml
 vendor
+coverage.txt
+/gitlab-branch-tracker
+/gitlab-branch-tracker-*
