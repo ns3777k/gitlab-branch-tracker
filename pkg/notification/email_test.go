@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"testing"
+
 	"github.com/ns3777k/gitlab-branch-tracker/pkg/report"
 	"gopkg.in/gomail.v2"
-	"testing"
 )
 
 type mailerMock struct {

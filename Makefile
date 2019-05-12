@@ -1,3 +1,13 @@
-.PHONY: mailhog
-mailhog:
-	docker run -p 1025:1025 -p 8025:8025 mailhog/mailhog
+.PHONY: build
+build:
+	go build -o gitlab-branch-tracker \
+    	cmd/gitlab-branch-tracker/main.go \
+    	cmd/gitlab-branch-tracker/watch.go
+
+.PHONY: test
+test:
+	go test -v ./...
+
+.PHONY: lint
+lint:
+	golangci-lint run

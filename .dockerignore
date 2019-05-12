@@ -1,0 +1,9 @@
+gitlab-branch-tracker
+*.iml
+.editorconfig
+.gitignore
+.golangci.yml
+README.md
+.idea
+vendor
+Dockerfile
