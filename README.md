@@ -1,5 +1,7 @@
 # Gitlab branch tracker
 
+[![Build Status](https://travis-ci.org/ns3777k/gitlab-branch-tracker.svg?branch=master)](https://travis-ci.org/ns3777k/gitlab-branch-tracker)
+
 Simple utility to find and report left branches in Gitlab.
 
 ## Requirements
