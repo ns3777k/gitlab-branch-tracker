@@ -1,0 +1,44 @@
+language: go
+
+cache:
+  directories:
+    - $HOME/.cache/go-build
+    - $HOME/gopath/pkg/mod
+
+matrix:
+  include:
+    - go: 1.11.x
+    - go: 1.12.x
+      env: LATEST=true
+
+install:
+  - export GO111MODULE=on
+  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
+  - go get github.com/mitchellh/gox
+  - go get -u github.com/modocache/gover
+
+script:
+  - make lint
+  - make coverage
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="{{.Dir}}-{{.OS}}-{{.Arch}}" -ldflags "-X main.version=$TRAVIS_BRANCH" -verbose ./cmd/gitlab-branch-tracker/...; fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -f ./coverage.txt
+
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key: $GITHUB_TOKEN
+    file:
+      - gitlab-branch-tracker-darwin-amd64
+      - gitlab-branch-tracker-linux-amd64
+      - gitlab-branch-tracker-windows-amd64.exe
+    on:
+      tags: true
+      condition: $LATEST = true
+
+  - provider: script
+    script: bash ci/docker_push.sh
+    on:
+      tags: true
+      condition: $LATEST = true

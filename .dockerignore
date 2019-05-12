@@ -7,3 +7,5 @@ README.md
 .idea
 vendor
 Dockerfile
+coverage.txt
+ci

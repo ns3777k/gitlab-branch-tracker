@@ -8,9 +8,12 @@ import (
 	"github.com/urfave/cli"
 )
 
+var version = "dev" //nolint:gochecknoglobals
+
 func createApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = "gitlab-branch-tracker"
+	app.Version = version
 	app.Usage = "start watching for branches"
 	app.Action = WatchAction
 	app.Flags = []cli.Flag{
