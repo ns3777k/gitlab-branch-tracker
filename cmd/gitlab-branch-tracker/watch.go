@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"net/http"
 	"net/url"
 	"os"
@@ -18,7 +19,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-func createGitlabClient(dsn string) (*gitlab.Client, error) {
+func createGitlabClient(dsn string, ignoreCertVerification bool) (*gitlab.Client, error) {
 	u, err := url.Parse(dsn)
 	if err != nil {
 		return nil, err
@@ -29,7 +30,15 @@ func createGitlabClient(dsn string) (*gitlab.Client, error) {
 		token = ""
 	}
 
-	gitlabClient := gitlab.NewClient(http.DefaultClient, token)
+	transport := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: ignoreCertVerification, //nolint:gosec
+			},
+		},
+	}
+
+	gitlabClient := gitlab.NewClient(transport, token)
 	err = gitlabClient.SetBaseURL(u.String())
 
 	return gitlabClient, err
@@ -82,7 +91,7 @@ func WatchAction(c *cli.Context) error {
 		return err
 	}
 
-	gitlabClient, err := createGitlabClient(c.String("gitlab-dsn"))
+	gitlabClient, err := createGitlabClient(c.String("gitlab-dsn"), c.Bool("gitlab-ignore-cert-verification"))
 	if err != nil {
 		return err
 	}

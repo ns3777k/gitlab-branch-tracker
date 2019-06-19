@@ -22,6 +22,11 @@ func createApp() *cli.App {
 			Usage:  "https://username:password@my.git/api/v4",
 			EnvVar: "GITLAB_DSN",
 		},
+		cli.BoolFlag{
+			Name:   "gitlab-ignore-cert-verification",
+			Usage:  "ignore certificate verification (i.e. self signed)",
+			EnvVar: "GITLAB_IGNORE_CERT_VERIFICATION",
+		},
 		cli.StringFlag{
 			Name:   "smtp-dsn",
 			Usage:  "smtp://username:password@host:port",
